@@ -1,5 +1,4 @@
 import React from "react";
-import useMyContacts from "../hooks/useMyContacts";
 import {
   Box,
   CircularProgress,
@@ -9,10 +8,13 @@ import {
   ListItemText,
   ListItemAvatar,
   Avatar,
+  ListItemSecondaryAction,
+  IconButton,
 } from "@material-ui/core";
+import CallIcon from "@material-ui/icons/Call";
+import EmailIcon from "@material-ui/icons/Email";
 
-function PeopleList() {
-  const { data, error } = useMyContacts();
+function PeopleList({ data, error }) {
 
   if (!data && !error) {
     return (
@@ -36,11 +38,30 @@ function PeopleList() {
   return (
     <List>
       {users.map((user) => (
-        <ListItem>
+        <ListItem key={user.id}>
           <ListItemAvatar>
             <Avatar>{user.name[0]}</Avatar>
           </ListItemAvatar>
-          <ListItemText primary={user.name} secondary={user.phone} />
+          <ListItemText
+            primary={
+              <>
+                <strong>{user.name}</strong>
+                {" - "}
+                {user.department && user.department.name}
+              </>
+            }
+            secondary={
+              `${user.age} ages, @${user.address}`
+            }
+          />
+          <ListItemSecondaryAction>
+            <IconButton href={`tel:${user.phone}`}>
+              <CallIcon />
+            </IconButton>
+            <IconButton href={`mailto:${user.email}`}>
+              <EmailIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
         </ListItem>
       ))}
     </List>

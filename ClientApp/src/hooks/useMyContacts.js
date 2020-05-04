@@ -1,15 +1,17 @@
-import { useState } from "react";
-import { users_list } from '../helpers/fakeData'
+import { useState, useEffect } from "react";
 
 function useMyContacts() {
-    const [data, setData] = useState();
-    const [error, setError] = useState();
+  const [data, setData] = useState();
+  const [error, setError] = useState();
 
-    setTimeout(() => {
-        setData({ users_list });
-    }, 1000);
+  useEffect(() => {
+    fetch("/api/User/all")
+      .then((response) => response.json())
+      .then((data) => setData({ users_list: data }))
+      .catch((error) => setError(error));
+  }, []);
 
-    return { data, error }
+  return { data, error };
 }
 
-export default useMyContacts
+export default useMyContacts;

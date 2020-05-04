@@ -32,12 +32,12 @@ function Layout({ children }) {
       <Box component={Container} p={2} fixed>
         <Grid container spacing={2}>
           <Grid item xs={12} lg={4}>
-            <Box component={Paper} p={2} height="72vh">
+            <Box component={Paper} overflow="hidden" height="72vh">
               <Profile/>
             </Box>
           </Grid>
           <Grid item xs={12} lg={8}>
-            <Box component={Paper} p={2} height="72vh">
+            <Box component={Paper} overflow="hidden" height="72vh">
               {children}
             </Box>
           </Grid>

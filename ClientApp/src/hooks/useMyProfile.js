@@ -1,15 +1,17 @@
-import { useState } from 'react';
-import { user } from '../helpers/fakeData';
+import { useState, useEffect } from "react";
 
-function useMyProfile() {
-    const [data, setData] = useState();
-    const [error, setError] = useState();
+function useMyProfile(id) {
+  const [data, setData] = useState();
+  const [error, setError] = useState();
 
-    setTimeout(() => {
-        setData({ user });
-    }, 1000);
+  useEffect(() => {
+    fetch(`/api/User/${id}`)
+      .then((response) => response.json())
+      .then((data) => setData({ user: data }))
+      .catch((error) => setError(error));
+  }, [id]);
 
-    return { data, error };
+  return { data, error };
 }
 
-export default useMyProfile
+export default useMyProfile;

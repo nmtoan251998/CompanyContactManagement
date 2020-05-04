@@ -3,7 +3,7 @@ import useMyProfile from "../hooks/useMyProfile";
 import { CircularProgress, Box, Typography, Avatar } from "@material-ui/core";
 
 function Profile() {
-  const { data, error } = useMyProfile();
+  const { data, error } = useMyProfile(1);
 
   if (!data && !error) {
     return (
@@ -25,21 +25,26 @@ function Profile() {
   const { user } = data;
 
   return (
-    <Box mt={2} display="flex" alignItems="center" flexDirection="column">
-      <Avatar style={{ height: 92, width: 92 }}>{user.name[0]}</Avatar>
-      <Box mt={2} width="100%">
+    <>
+      <Box bgcolor="darkblue" color="white" p={2}>
+        <Typography variant="h5">You</Typography>
+      </Box>
+      <Avatar style={{ height: 92, width: 92, margin: "18px auto" }}>
+        {user.name[0]}
+      </Avatar>
+      <Box pl={2} pr={2}>
         <Typography variant="h6" align="center">
           {user.name}
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary">
-          {user.department.name}
+          {user.department && user.department.name}
         </Typography>
         <Box mt={1} mb={2} borderBottom="solid 1px #eee" />
         <Typography>
           <Typography component="span" color="textSecondary">
-            {"DOB: "}
+            {"Age: "}
           </Typography>
-          {new Date(user.dob * 1).toLocaleDateString()}
+          {user.age}
         </Typography>
         <Typography>
           <Typography component="span" color="textSecondary">
@@ -60,7 +65,7 @@ function Profile() {
           {user.address}
         </Typography>
       </Box>
-    </Box>
+    </>
   );
 }
 
