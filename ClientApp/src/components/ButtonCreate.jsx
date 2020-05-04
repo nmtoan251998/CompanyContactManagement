@@ -3,7 +3,7 @@ import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import UserDialog from "./UserDialog";
 
-function ButtonCreate() {
+function ButtonCreate({ refresh }) {
   const [showUserDialog, setShowUserDialog] = useState(false);
   return (
     <>
@@ -13,6 +13,7 @@ function ButtonCreate() {
       <UserDialog
         open={showUserDialog}
         onClose={() => setShowUserDialog(false)}
+        onCompleted={refresh}
       />
     </>
   );

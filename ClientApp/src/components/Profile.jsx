@@ -3,7 +3,7 @@ import useMyProfile from "../hooks/useMyProfile";
 import { CircularProgress, Box, Typography, Avatar } from "@material-ui/core";
 
 function Profile() {
-  const { data, error } = useMyProfile(1);
+  const { data, error } = useMyProfile(3);
 
   if (!data && !error) {
     return (

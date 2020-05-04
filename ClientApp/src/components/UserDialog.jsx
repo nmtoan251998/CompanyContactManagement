@@ -8,6 +8,7 @@ import {
   TextField,
   Grid,
   Typography,
+  CircularProgress,
 } from "@material-ui/core";
 import useCreateUser from "../hooks/useCreateUser";
 
@@ -21,9 +22,9 @@ const formInitData = {
   pwd: "123456",
 };
 
-function UserDialog({ open, onClose }) {
+function UserDialog({ open, onClose, onCompleted }) {
   const [formData, setFormData] = useState(formInitData);
-  const [createUser, { error }] = useCreateUser();
+  const [createUser, { error, isLoading }] = useCreateUser();
 
   useEffect(() => {
     setFormData(formInitData);
@@ -40,6 +41,7 @@ function UserDialog({ open, onClose }) {
     e.preventDefault();
     const { data } = await createUser(formData);
     if (data) {
+      onCompleted();
       onClose();
     }
   };
@@ -138,8 +140,9 @@ function UserDialog({ open, onClose }) {
           form="userForm"
           onClick={handleSubmit}
           color="primary"
+          disabled={isLoading}
         >
-          Save
+          {isLoading ? <CircularProgress size={24} /> : "Save"}
         </Button>
       </DialogActions>
     </Dialog>

@@ -27,7 +27,7 @@ function Home() {
               contacts.data.users_list.length) ||
             0
           })`}</Typography>
-          <ButtonCreate />
+          <ButtonCreate {...contacts} />
         </Box>
         <Box overflow="auto" flexGrow={1}>
           <PeopleList {...contacts} />

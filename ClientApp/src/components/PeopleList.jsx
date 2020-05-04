@@ -1,21 +1,8 @@
 import React from "react";
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Avatar,
-  ListItemSecondaryAction,
-  IconButton,
-} from "@material-ui/core";
-import CallIcon from "@material-ui/icons/Call";
-import EmailIcon from "@material-ui/icons/Email";
+import { Box, CircularProgress, Typography, List } from "@material-ui/core";
+import UserItem from "./UserItem";
 
-function PeopleList({ data, error }) {
-
+function PeopleList({ data, error, refresh }) {
   if (!data && !error) {
     return (
       <Box
@@ -38,31 +25,7 @@ function PeopleList({ data, error }) {
   return (
     <List>
       {users.map((user) => (
-        <ListItem key={user.id}>
-          <ListItemAvatar>
-            <Avatar>{user.name[0]}</Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <>
-                <strong>{user.name}</strong>
-                {" - "}
-                {user.department && user.department.name}
-              </>
-            }
-            secondary={
-              `${user.age} ages, @${user.address}`
-            }
-          />
-          <ListItemSecondaryAction>
-            <IconButton href={`tel:${user.phone}`}>
-              <CallIcon />
-            </IconButton>
-            <IconButton href={`mailto:${user.email}`}>
-              <EmailIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
+        <UserItem key={user.id} user={user} refresh={refresh} />
       ))}
     </List>
   );

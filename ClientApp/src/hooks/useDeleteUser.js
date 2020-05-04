@@ -1,22 +1,19 @@
 import { useState } from "react";
 
-function useCreateUser() {
+function useDeleteUser() {
   const [data, setData] = useState();
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCreate = async (data) => {
+  const handleDelete = async (id) => {
     setIsLoading(true);
-    const response = await fetch("/api/User/", {
+    const response = await fetch(`/api/User/${id}`, {
       body: JSON.stringify(data),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      method: "DELETE",
     });
     const jsonData = await response.json();
     setIsLoading(false);
-    if (response.status === 201) {
+    if (response.status === 200) {
       setData(jsonData);
       return { data: jsonData, error: null };
     } else {
@@ -25,7 +22,7 @@ function useCreateUser() {
     }
   };
 
-  return [handleCreate, { data, error, isLoading }];
+  return [handleDelete, { data, error, isLoading }];
 }
 
-export default useCreateUser;
+export default useDeleteUser;
