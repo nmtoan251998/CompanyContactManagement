@@ -24,65 +24,71 @@ namespace CompanyContactManagment.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<DepartmentModel>>> GetDepartments()
         {
-            return await _context.Departments.ToListAsync();
+            var departments = await _context.Departments.ToListAsync();
+            foreach (var department in departments)
+            {
+                var company = await _context.Companies.FindAsync(department.CompanyId);
+                if (company != null)
+                {
+                    department.Company = company;
+                }
+            }
+
+            return departments;
         }
 
         // GET: api/Department/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DepartmentModel>> GetDepartmentModel(int id)
         {
-            var departmentModel = await _context.Departments.FindAsync(id);
+            var department = await _context.Departments.FindAsync(id);
 
-            if (departmentModel == null)
+            if (department == null)
             {
                 return NotFound();
             }
 
-            return departmentModel;
+            var company = await _context.Companies.FindAsync(department.CompanyId);
+            if (company != null)
+            {
+                department.Company = company;
+            }
+
+
+
+            return department;
         }
 
         // PUT: api/Department/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        // add modification method here
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDepartmentModel(int id, DepartmentModel departmentModel)
-        {
-            if (id != departmentModel.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(departmentModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DepartmentModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Department
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<DepartmentModel>> PostDepartmentModel(DepartmentModel departmentModel)
+        public async Task<ActionResult<DepartmentModel>> PostDepartmentModel(DepartmentModel department)
         {
-            _context.Departments.Add(departmentModel);
+            var company = await _context.Companies.FindAsync(department.CompanyId);
+            if (company == null)
+            {
+                return NotFound("No company id found");
+            }
+
+            _context.Departments.Add(department);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDepartmentModel", new { id = departmentModel.Id }, departmentModel);
+            return CreatedAtAction("GetDepartmentModel", new { id = department.Id }, department);
+        }
+
+        // DELETE: api/Department/all
+        [HttpDelete("all")]
+        public async Task<ActionResult<DepartmentModel>> DeleteDepartmentsModel()
+        {
+            var list = await _context.Departments.ToListAsync();
+            _context.Departments.RemoveRange(list);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         // DELETE: api/Department/5
@@ -98,7 +104,7 @@ namespace CompanyContactManagment.Controllers
             _context.Departments.Remove(departmentModel);
             await _context.SaveChangesAsync();
 
-            return departmentModel;
+            return NoContent();
         }
 
         private bool DepartmentModelExists(int id)

@@ -4,6 +4,8 @@ namespace CompanyContactManagment.Models
 {
     public class CompanyModel
     {
+        public CompanyModel() {}
+
         [Key]
         public int Id { get; set; }
 

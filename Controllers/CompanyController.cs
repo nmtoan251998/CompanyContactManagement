@@ -42,36 +42,8 @@ namespace CompanyContactManagment.Controllers
         }
 
         // PUT: api/Company/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        // add modification method here
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompanyModel(int id, CompanyModel companyModel)
-        {
-            if (id != companyModel.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(companyModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompanyModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Company
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -83,6 +55,16 @@ namespace CompanyContactManagment.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCompanyModel", new { id = companyModel.Id }, companyModel);
+        }
+
+        // DELETE: api/Department/all
+        [HttpDelete("all")]
+        public async Task<ActionResult<CompanyModel>> DeleteCompanies()
+        {
+            var list = await _context.Companies.ToListAsync();
+            _context.Companies.RemoveRange(list);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         // DELETE: api/Company/5

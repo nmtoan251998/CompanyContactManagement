@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CompanyContactManagment.Models
 {
@@ -9,7 +10,7 @@ namespace CompanyContactManagment.Models
 
         public UserModel()
         {
-            Role = UserRoleEnum.Admin;
+            this.Role = UserRoleEnum.Admin;
         }
 
         [Key]
@@ -27,13 +28,14 @@ namespace CompanyContactManagment.Models
         [Required]
         public UserRoleEnum Role { get; set; }
 
-        [Required]
-        public virtual DepartmentModel department_id { get; set; }
-
-        public DateTime Dob { get; set; }
+        public int Age { get; set; }
 
         public string Phone { get; set; }
 
         public string Address { get; set; }
+
+        [ForeignKey("Departments")]
+        public int DepartmentId { get; set; }
+        public virtual DepartmentModel Department { get; set; }
     }
 }

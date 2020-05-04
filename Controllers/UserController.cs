@@ -24,7 +24,17 @@ namespace CompanyContactManagment.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<UserModel>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                var deparment = await _context.Departments.FindAsync(user.DepartmentId);
+                if (deparment != null)
+                {
+                    user.Department = deparment;
+                }
+            }
+
+            return users;
         }
 
         // GET: api/User/5
@@ -42,47 +52,35 @@ namespace CompanyContactManagment.Controllers
         }
 
         // PUT: api/User/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
-        {
-            if (id != userModel.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(userModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        // add modification method here
+        //[HttpPut("{id}")]
 
         // POST: api/User
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
+        public async Task<ActionResult<UserModel>> PostUserModel(UserModel user)
         {
-            _context.Users.Add(userModel);
+            var department = await _context.Departments.FindAsync(user.DepartmentId);
+            if (department == null)
+            {
+                return NotFound("No department id found");
+            }
+
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
+            return CreatedAtAction("GetUserModel", new { id = user.Id }, user);
+        }
+
+        // DELETE: api/Department/all
+        [HttpDelete("all")]
+        public async Task<ActionResult<UserModel>> DeleteUsers()
+        {
+            var list = await _context.Users.ToListAsync();
+            _context.Users.RemoveRange(list);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         // DELETE: api/User/5
