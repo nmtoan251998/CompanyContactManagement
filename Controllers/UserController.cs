@@ -9,7 +9,7 @@ using CompanyContactManagment.Models;
 
 namespace CompanyContactManagment.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -51,9 +51,63 @@ namespace CompanyContactManagment.Controllers
             return userModel;
         }
 
+        // PUT: api/User/
+        [HttpPut]
+        public async Task<IActionResult> PutUserModel(UserModel user)
+        {
+            if (user.Id == 0)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserModelExists(user.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // PUT: api/User/5
         // add modification method here
-        //[HttpPut("{id}")]
+        // [HttpPut("{id}")]
+        // public async Task<ActionResult<UserModel>> PutUserModel(int id, UserModel user) {
+        //     if (id != user.Id) {
+        //         return BadRequest();
+        //     }
+        //     var userInfor = await _context.Users.FindAsync(id);
+        //     return userInfor;
+        // _context.Entry(user).State = EntityState.Modified;
+
+        // try {
+        //     await _context.SaveChangesAsync();
+
+        // }
+        // catch (DbUpdateConcurrencyException){
+        //     if (!UserModelExists(id)) {
+        //         return user;
+        //     }
+        //     else {
+        //         throw;
+        //     }
+        // }
+        // return Ok();
+        // return NoContent();
+        // }
+
 
         // POST: api/User
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -98,6 +152,8 @@ namespace CompanyContactManagment.Controllers
 
             return userModel;
         }
+
+
 
         private bool UserModelExists(int id)
         {
