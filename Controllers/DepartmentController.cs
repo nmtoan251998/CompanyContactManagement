@@ -15,6 +15,8 @@ namespace CompanyContactManagment.Controllers
     {
         private readonly CompanyContactContext _context;
 
+        // response status
+        private Status status = new Status();
         public DepartmentController(CompanyContactContext context)
         {
             _context = context;
@@ -45,7 +47,8 @@ namespace CompanyContactManagment.Controllers
 
             if (department == null)
             {
-                return NotFound();
+                setStatus("fail", "Department not found", 401);
+                return NotFound(status);
             }
 
             var company = await _context.Companies.FindAsync(department.CompanyId);
@@ -66,7 +69,8 @@ namespace CompanyContactManagment.Controllers
         {
             if (departmentModel.Id == 0)
             {
-                return BadRequest();
+                setStatus("fail", "Error in request", 403);
+                return BadRequest(status);
             }
 
             _context.Entry(departmentModel).State = EntityState.Modified;
@@ -79,6 +83,7 @@ namespace CompanyContactManagment.Controllers
             {
                 if (!DepartmentModelExists(departmentModel.Id))
                 {
+                    setStatus("fail", "department not found", 401);
                     return NotFound();
                 }
                 else
@@ -86,8 +91,8 @@ namespace CompanyContactManagment.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
+            setStatus("success", "update department successfully", 200);
+            return Ok(status);
         }
 
         // POST: api/Department
@@ -99,7 +104,8 @@ namespace CompanyContactManagment.Controllers
             var company = await _context.Companies.FindAsync(department.CompanyId);
             if (company == null)
             {
-                return NotFound("No company id found");
+                setStatus("fail", "No company id found", 401);
+                return NotFound(status);
             }
 
             _context.Departments.Add(department);
@@ -115,7 +121,8 @@ namespace CompanyContactManagment.Controllers
             var list = await _context.Departments.ToListAsync();
             _context.Departments.RemoveRange(list);
             await _context.SaveChangesAsync();
-            return NoContent();
+            setStatus("success", "delete department successfully", 200);
+            return Ok(status);
         }
 
         // DELETE: api/Department/5
@@ -125,18 +132,25 @@ namespace CompanyContactManagment.Controllers
             var departmentModel = await _context.Departments.FindAsync(id);
             if (departmentModel == null)
             {
-                return NotFound();
+                setStatus("fail", "department not found", 401);
+                return NotFound(status);
             }
 
             _context.Departments.Remove(departmentModel);
             await _context.SaveChangesAsync();
-
-            return NoContent();
+            setStatus("success", "delete department successfully", 200);
+            return Ok(status);
         }
 
         private bool DepartmentModelExists(int id)
         {
             return _context.Departments.Any(e => e.Id == id);
+        }
+
+        private void setStatus(string status_, string message, int code) {            
+            status.status = status_;
+            status.message = message;
+            status.code = code;
         }
     }
 }

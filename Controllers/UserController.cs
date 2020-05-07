@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CompanyContactManagment.Models;
+using Newtonsoft.Json;
 
 namespace CompanyContactManagment.Controllers
 {
@@ -13,6 +14,7 @@ namespace CompanyContactManagment.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private Status status = new Status();
         private readonly CompanyContactContext _context;
 
         public UserController(CompanyContactContext context)
@@ -45,7 +47,8 @@ namespace CompanyContactManagment.Controllers
 
             if (userModel == null)
             {
-                return NotFound();
+                setStatus("fail", "user not found", 401);
+                return NotFound(status);
             }
 
             return userModel;
@@ -57,7 +60,8 @@ namespace CompanyContactManagment.Controllers
         {
             if (user.Id == 0)
             {
-                return BadRequest();
+                setStatus("fail", "Error in request", 403);
+                return BadRequest(status);
             }
 
             _context.Entry(user).State = EntityState.Modified;
@@ -70,15 +74,16 @@ namespace CompanyContactManagment.Controllers
             {
                 if (!UserModelExists(user.Id))
                 {
-                    return NotFound();
+                    setStatus("fail", "user not found", 401);
+                    return NotFound(status);
                 }
                 else
                 {
                     throw;
                 }
             }
-
-            return NoContent();
+            setStatus("success", "update user successfully", 200);
+            return Ok(status);
         }
 
         // POST: api/User
@@ -90,7 +95,8 @@ namespace CompanyContactManagment.Controllers
             var department = await _context.Departments.FindAsync(user.DepartmentId);
             if (department == null)
             {
-                return NotFound("No department id found");
+                setStatus("fail", "No department id found", 401);
+                return NotFound(status);
             }
 
             _context.Users.Add(user);
@@ -106,7 +112,8 @@ namespace CompanyContactManagment.Controllers
             var list = await _context.Users.ToListAsync();
             _context.Users.RemoveRange(list);
             await _context.SaveChangesAsync();
-            return NoContent();
+            setStatus("success", "delete user successfully", 200);
+            return Ok(status);
         }
 
         // DELETE: api/User/5
@@ -116,6 +123,7 @@ namespace CompanyContactManagment.Controllers
             var userModel = await _context.Users.FindAsync(id);
             if (userModel == null)
             {
+                setStatus("fail", "User not found", 401);
                 return NotFound();
             }
 
@@ -126,10 +134,32 @@ namespace CompanyContactManagment.Controllers
         }
 
 
+        // POST: api/user/login
+        [HttpPost("login")]
+        public async Task<ActionResult> Login([FromBody] LoginModel acc)
+        {
+            
+            // check in
+            var login_user = await _context.Users.SingleOrDefaultAsync(user => user.Email == acc.Email && user.Pwd == acc.Pwd);
+            if (login_user == null)
+            {
+                setStatus("fail", "incorrect authencation", 401);
+                return NotFound(status);
+            }
+            setStatus("success", "login successfully", 200);
+
+            return Ok(status);
+        }
 
         private bool UserModelExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+
+        private void setStatus(string status_, string message, int code) {            
+            status.status = status_;
+            status.message = message;
+            status.code = code;
         }
     }
 }
