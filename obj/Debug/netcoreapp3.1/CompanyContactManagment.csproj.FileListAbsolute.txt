@@ -467,3 +467,6 @@ E:/Workspace/CompanyContactManagment/obj/Debug/netcoreapp3.1/CompanyContactManag
 /home/huynh/HKII_2019-2020/dotnet/CompanyContactManagement/obj/Debug/netcoreapp3.1/CompanyContactManagment.dll
 /home/huynh/HKII_2019-2020/dotnet/CompanyContactManagement/obj/Debug/netcoreapp3.1/CompanyContactManagment.pdb
 /home/huynh/HKII_2019-2020/dotnet/CompanyContactManagement/obj/Debug/netcoreapp3.1/CompanyContactManagment.genruntimeconfig.cache
+/home/huynh/HKII_2019-2020/dotnet/CompanyContactManagement/bin/Debug/netcoreapp3.1/ClientApp/package-lock.json
+/home/huynh/HKII_2019-2020/dotnet/CompanyContactManagement/bin/Debug/netcoreapp3.1/ClientApp/package.json
+/home/huynh/HKII_2019-2020/dotnet/CompanyContactManagement/bin/Debug/netcoreapp3.1/ClientApp/public/manifest.json

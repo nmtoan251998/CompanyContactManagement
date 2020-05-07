@@ -61,7 +61,34 @@ namespace CompanyContactManagment.Controllers
 
         // PUT: api/Department/5
         // add modification method here
-        [HttpPut("{id}")]
+        [HttpPut]
+        public async Task<IActionResult> PutDepartmentModel(DepartmentModel departmentModel)
+        {
+            if (departmentModel.Id == 0)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(departmentModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DepartmentModelExists(departmentModel.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // POST: api/Department
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
