@@ -1,29 +1,35 @@
 # API documentation using POSTMAN
 ## Link
-https://www.getpostman.com/collections/8d9e32c2cfdb1879a9f9
+https://documenter.getpostman.com/view/8129633/SzmccKk6?version=latest
 
 ## List
 **Prefix**: `http://localhost:8080/api/`
-### Companies (/Company)
+### Companies (api/company)
 1. Create `POST /`
 2. Get by id `GET /:id`
 3. Get all `GET /all`
 4. Delete all `DELETE /all`
 5. Delete by id `DELETE /:id`
+6. Company `PUT /api/Company/:id`
 
-### Departments (/Deparment)
+### Departments (api/deparment)
 1. Create `POST /`
 2. Get by id `GET /:id`
 3. Get all `GET /all`
 4. Delete all `DELETE /all`
 5. Delete by id `DELETE /:id`
+6. Department `PUT /api/Department/:id`
 
-### Users (/User)
+### Users (api/user)
 1. Create `POST /`
 2. Get by id `GET /:id`
 3. Get all `GET /all`
 4. Delete all `DELETE /all`
 5. Delete by id `DELETE /:id`
+6. User `PUT /api/User/:id`
+
+### Login (api/user/login)
+1. user login `POST /`
 
 # How to start
 **Note** Server is started on localhost:8080
@@ -69,6 +75,3 @@ dotnet run
 
 # TODOs
 Create modifidation APIs for each resource
-1. User `PUT /api/User/:id`
-2. Company `PUT /api/Company/:id`
-3. Department `PUT /api/Department/:id`
