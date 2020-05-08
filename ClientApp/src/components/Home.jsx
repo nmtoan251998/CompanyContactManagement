@@ -16,7 +16,7 @@ function Home() {
     if (!user) {
       history.push("/login");
     }
-  }, [user]);
+  }, [user, history]);
 
   return (
     <Layout>

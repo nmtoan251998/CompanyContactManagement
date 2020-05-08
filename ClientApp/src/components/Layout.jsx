@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   AppBar,
   Toolbar,
@@ -12,9 +12,17 @@ import {
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import { useHistory } from "react-router-dom";
 import Profile from "./Profile";
+import { AppContext } from "../App";
 
 function Layout({ children }) {
   const history = useHistory();
+  const { setUser } = useContext(AppContext);
+
+  const handleLogout = () => {
+    localStorage.clear("asdfoiwehfo");
+    setUser(null);
+    history.push("/login");
+  }
 
   return (
     <>
@@ -23,7 +31,7 @@ function Layout({ children }) {
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             Company People
           </Typography>
-          <IconButton color="inherit" onClick={() => history.push("/login")}>
+          <IconButton color="inherit" onClick={handleLogout}>
             <ExitIcon />
           </IconButton>
         </Toolbar>

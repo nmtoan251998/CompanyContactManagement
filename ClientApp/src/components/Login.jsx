@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import { Paper, Typography, TextField, Button } from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
@@ -12,7 +12,13 @@ function Login() {
   const [pwd, setPwd] = useState("");
   const [login, { isLoading }] = useLogin();
   const [isError, setIsError] = useState(false);
-  const { setUser } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
+
+  useEffect(() => {
+    if (user) {
+      history.push("/");
+    }
+  }, [user, history]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

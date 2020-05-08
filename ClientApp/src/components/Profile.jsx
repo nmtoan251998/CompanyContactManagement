@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import useMyProfile from "../hooks/useMyProfile";
 import { CircularProgress, Box, Typography, Avatar } from "@material-ui/core";
 import { AppContext } from "../App";
 
