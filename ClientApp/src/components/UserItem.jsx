@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  CircularProgress,
   ListItem,
   ListItemText,
   ListItemAvatar,
@@ -11,20 +10,13 @@ import {
 import CallIcon from "@material-ui/icons/Call";
 import EmailIcon from "@material-ui/icons/Email";
 import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from '@material-ui/icons/Edit';
-import useDeleteUser from "../hooks/useDeleteUser";
+import EditIcon from "@material-ui/icons/Edit";
 import UserDialog from "./UserDialog";
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
 
 function UserItem({ user, refresh }) {
-  const [deleteUser, { isLoading: deleting }] = useDeleteUser();
+  const [showDel, setShowDel] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-
-  const handleDeleteUser = async (id) => {
-    const { data } = await deleteUser(id);
-    if (data) {
-      refresh();
-    }
-  };
 
   return (
     <>
@@ -49,16 +41,11 @@ function UserItem({ user, refresh }) {
           <IconButton href={`mailto:${user.email}`}>
             <EmailIcon />
           </IconButton>
-          <IconButton
-            onClick={() => setShowEdit(true)}
-          >
+          <IconButton onClick={() => setShowEdit(true)}>
             <EditIcon />
           </IconButton>
-          <IconButton
-            onClick={() => handleDeleteUser(user.id)}
-            disabled={deleting}
-          >
-            {deleting ? <CircularProgress size={24} /> : <DeleteIcon />}
+          <IconButton onClick={() => setShowDel(true)}>
+            <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
@@ -67,6 +54,12 @@ function UserItem({ user, refresh }) {
         onClose={() => setShowEdit(false)}
         onCompleted={refresh}
         userData={user}
+      />
+      <DeleteConfirmDialog
+        open={showDel}
+        onClose={() => setShowDel(false)}
+        onCompleted={refresh}
+        user={user}
       />
     </>
   );
