@@ -136,7 +136,7 @@ namespace CompanyContactManagment.Controllers
 
         // POST: api/user/login
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginModel acc)
+        public async Task<ActionResult<UserModel>> Login([FromBody] LoginModel acc)
         {
             
             // check in
@@ -148,7 +148,7 @@ namespace CompanyContactManagment.Controllers
             }
             setStatus("success", "login successfully", 200);
 
-            return Ok(status);
+            return login_user;
         }
 
         private bool UserModelExists(int id)

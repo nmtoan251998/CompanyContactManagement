@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import useMyProfile from "../hooks/useMyProfile";
 import { CircularProgress, Box, Typography, Avatar } from "@material-ui/core";
+import { AppContext } from "../App";
 
 function Profile() {
-  const { data, error } = useMyProfile(3);
+  const { user } = useContext(AppContext);
 
-  if (!data && !error) {
+  if (!user) {
     return (
       <Box
         height="100%"
@@ -17,12 +18,6 @@ function Profile() {
       </Box>
     );
   }
-
-  if (error) {
-    return <Typography color="error">Error: {error.message}</Typography>;
-  }
-
-  const { user } = data;
 
   return (
     <>
