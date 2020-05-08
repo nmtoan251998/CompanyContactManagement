@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Layout from "./Layout";
 import { Box, Typography } from "@material-ui/core";
 import PeopleList from "./PeopleList";
 import useMyContacts from "../hooks/useMyContacts";
 import ButtonCreate from "./ButtonCreate";
+import { AppContext } from "../App";
+import { useHistory } from "react-router-dom";
 
 function Home() {
   const contacts = useMyContacts();
+  const history = useHistory();
+  const { user } = useContext(AppContext);
+
+  useEffect(() => {
+    if (!user) {
+      history.push("/login");
+    }
+  }, [user, history]);
 
   return (
     <Layout>
@@ -20,14 +30,14 @@ function Home() {
           display="flex"
           alignItems="center"
         >
-          <Typography style={{ flexGrow: 1 }} variant="h5">{`People (${
+          <Typography style={{ flexGrow: 1, padding: "8px 0px" }} variant="h5">{`People (${
             (contacts &&
               contacts.data &&
               contacts.data.users_list &&
               contacts.data.users_list.length) ||
             0
           })`}</Typography>
-          <ButtonCreate {...contacts} />
+          {user && user.role === 0 && <ButtonCreate {...contacts} />}
         </Box>
         <Box overflow="auto" flexGrow={1}>
           <PeopleList {...contacts} />

@@ -11,6 +11,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import useCreateUser from "../hooks/useCreateUser";
+import useUpdateUser from "../hooks/useUpdateUser";
 
 const formInitData = {
   name: "",
@@ -22,13 +23,23 @@ const formInitData = {
   pwd: "123456",
 };
 
-function UserDialog({ open, onClose, onCompleted }) {
-  const [formData, setFormData] = useState(formInitData);
-  const [createUser, { error, isLoading }] = useCreateUser();
+function UserDialog({ open, onClose, onCompleted, userData }) {
+  const [formData, setFormData] = useState(userData || formInitData);
+  const [
+    createUser,
+    { error: createError, isLoading: creating },
+  ] = useCreateUser();
+  const [
+    updateUser,
+    { error: updateError, isLoading: updating },
+  ] = useUpdateUser();
+
+  const error = updateError || createError;
+  const isLoading = updating || creating;
 
   useEffect(() => {
-    setFormData(formInitData);
-  }, [open]);
+    setFormData(userData || formInitData);
+  }, [open, userData, setFormData]);
 
   const handleChange = (field) => (event) => {
     setFormData({
@@ -39,9 +50,11 @@ function UserDialog({ open, onClose, onCompleted }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data } = await createUser(formData);
+    const { data } = userData
+      ? await updateUser(formData)
+      : await createUser(formData);
     if (data) {
-      onCompleted();
+      onCompleted(formData);
       onClose();
     }
   };
