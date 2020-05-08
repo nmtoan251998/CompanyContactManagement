@@ -1,9 +1,18 @@
-import React, { useContext } from "react";
-import { CircularProgress, Box, Typography, Avatar } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import {
+  CircularProgress,
+  Box,
+  Typography,
+  Avatar,
+  IconButton,
+} from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import { AppContext } from "../App";
+import UserDialog from "./UserDialog";
 
 function Profile() {
-  const { user } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
+  const [showEdit, setShowEdit] = useState(false);
 
   if (!user) {
     return (
@@ -20,8 +29,27 @@ function Profile() {
 
   return (
     <>
-      <Box bgcolor="darkblue" color="white" p={2}>
-        <Typography variant="h5">You</Typography>
+      <Box
+        bgcolor="darkblue"
+        color="white"
+        p={1}
+        pl={2}
+        pr={2}
+        display="flex"
+        alignItems="center"
+      >
+        <Typography style={{ flexGrow: 1 }} variant="h5">
+          You
+        </Typography>
+        <IconButton color="inherit" onClick={() => setShowEdit(true)}>
+          <EditIcon />
+        </IconButton>
+        <UserDialog
+          open={showEdit}
+          onClose={() => setShowEdit(false)}
+          userData={user}
+          onCompleted={(data) => setUser(data)}
+        />
       </Box>
       <Avatar style={{ height: 92, width: 92, margin: "18px auto" }}>
         {user.name[0]}

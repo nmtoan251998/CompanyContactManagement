@@ -54,7 +54,7 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
       ? await updateUser(formData)
       : await createUser(formData);
     if (data) {
-      onCompleted();
+      onCompleted(formData);
       onClose();
     }
   };
