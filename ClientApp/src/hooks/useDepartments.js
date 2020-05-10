@@ -1,22 +1,17 @@
 import { useState, useEffect } from "react";
 
-function useMyContacts() {
+function useDepartments() {
   const [data, setData] = useState();
   const [error, setError] = useState();
-  const [timestamp, setTimestamp] = useState(Date.now());
 
   useEffect(() => {
-    fetch("/api/User/all")
+    fetch("/api/department/all")
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => setError(error));
-  }, [timestamp]);
+  }, []);
 
-  const refresh = () => {
-    setTimestamp(Date.now());
-  };
-
-  return { data, error, refresh };
+  return { data, error };
 }
 
-export default useMyContacts;
+export default useDepartments;

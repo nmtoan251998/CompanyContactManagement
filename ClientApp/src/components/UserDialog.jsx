@@ -9,9 +9,11 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  MenuItem,
 } from "@material-ui/core";
 import useCreateUser from "../hooks/useCreateUser";
 import useUpdateUser from "../hooks/useUpdateUser";
+import useDepartments from "../hooks/useDepartments";
 
 const formInitData = {
   name: "",
@@ -25,6 +27,7 @@ const formInitData = {
 
 function UserDialog({ open, onClose, onCompleted, userData }) {
   const [formData, setFormData] = useState(userData || formInitData);
+  const { data: departments } = useDepartments();
   const [
     createUser,
     { error: createError, isLoading: creating },
@@ -54,7 +57,10 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
       ? await updateUser(formData)
       : await createUser(formData);
     if (data) {
-      onCompleted(formData);
+      onCompleted({
+        ...formData,
+        department: departments[formData.departmentId -1],
+      });
       onClose();
     }
   };
@@ -137,7 +143,18 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
               variant="outlined"
               size="small"
               required
-            />
+              select
+            >
+              <MenuItem value="" disabled>
+                Choose a department
+              </MenuItem>
+              {departments &&
+                departments.map((d) => (
+                  <MenuItem key={d.id} value={d.id}>
+                    {`${d.name} (${d.company.name})`}
+                  </MenuItem>
+                ))}
+            </TextField>
           </Grid>
           <Grid item xs={12}>
             <Typography color="error">{error && error.title}</Typography>

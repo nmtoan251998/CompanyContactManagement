@@ -32,6 +32,9 @@ function UserItem({ user, refresh }) {
               <strong>{user.name}</strong>
               {" - "}
               {user.department && user.department.name}
+              {user.department &&
+                user.department.company &&
+                ` (${user.department.company.name})`}
             </>
           }
           secondary={`${user.role === 0 ? "Manager" : "Staff"}, ${
@@ -57,18 +60,22 @@ function UserItem({ user, refresh }) {
           )}
         </ListItemSecondaryAction>
       </ListItem>
-      <UserDialog
-        open={showEdit}
-        onClose={() => setShowEdit(false)}
-        onCompleted={refresh}
-        userData={user}
-      />
-      <DeleteConfirmDialog
-        open={showDel}
-        onClose={() => setShowDel(false)}
-        onCompleted={refresh}
-        user={user}
-      />
+      {showEdit && (
+        <UserDialog
+          open={showEdit}
+          onClose={() => setShowEdit(false)}
+          onCompleted={refresh}
+          userData={user}
+        />
+      )}
+      {showDel && (
+        <DeleteConfirmDialog
+          open={showDel}
+          onClose={() => setShowDel(false)}
+          onCompleted={refresh}
+          user={user}
+        />
+      )}
     </>
   );
 }

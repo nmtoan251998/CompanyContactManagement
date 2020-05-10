@@ -10,11 +10,13 @@ function ButtonCreate({ refresh }) {
       <IconButton color="inherit" onClick={() => setShowUserDialog(true)}>
         <AddIcon />
       </IconButton>
-      <UserDialog
-        open={showUserDialog}
-        onClose={() => setShowUserDialog(false)}
-        onCompleted={refresh}
-      />
+      {showUserDialog && (
+        <UserDialog
+          open={showUserDialog}
+          onClose={() => setShowUserDialog(false)}
+          onCompleted={refresh}
+        />
+      )}
     </>
   );
 }

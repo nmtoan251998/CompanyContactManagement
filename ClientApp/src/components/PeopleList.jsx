@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, CircularProgress, Typography, List } from "@material-ui/core";
 import UserItem from "./UserItem";
+import { AppContext } from "../App";
 
 function PeopleList({ data, error, refresh }) {
+  const { user: currUser } = useContext(AppContext);
+
   if (!data && !error) {
     return (
       <Box
@@ -20,13 +23,13 @@ function PeopleList({ data, error, refresh }) {
     return <Typography color="error">Error: {error.message}</Typography>;
   }
 
-  const { users_list: users } = data;
-
   return (
     <List>
-      {users.map((user) => (
-        <UserItem key={user.id} user={user} refresh={refresh} />
-      ))}
+      {data
+        .filter((user) => user.id !== currUser.id)
+        .map((user) => (
+          <UserItem key={user.id} user={user} refresh={refresh} />
+        ))}
     </List>
   );
 }

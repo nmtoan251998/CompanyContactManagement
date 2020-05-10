@@ -44,12 +44,14 @@ function Profile() {
         <IconButton color="inherit" onClick={() => setShowEdit(true)}>
           <EditIcon />
         </IconButton>
-        <UserDialog
-          open={showEdit}
-          onClose={() => setShowEdit(false)}
-          userData={user}
-          onCompleted={(data) => setUser(data)}
-        />
+        {showEdit && (
+          <UserDialog
+            open={showEdit}
+            onClose={() => setShowEdit(false)}
+            userData={user}
+            onCompleted={(data) => setUser(data)}
+          />
+        )}
       </Box>
       <Avatar style={{ height: 92, width: 92, margin: "18px auto" }}>
         {user.name[0]}
@@ -60,6 +62,7 @@ function Profile() {
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary">
           {user.department && user.department.name}
+          {user.department && user.department.company && ` (${user.department.company.name})`}
         </Typography>
         <Box mt={1} mb={2} borderBottom="solid 1px #eee" />
         <Typography>
