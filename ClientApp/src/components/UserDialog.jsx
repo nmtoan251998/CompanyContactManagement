@@ -26,6 +26,7 @@ const formInitData = {
   address: "",
   departmentId: "",
   pwd: "",
+  role: 1,
 };
 
 function UserDialog({ open, onClose, onCompleted, userData }) {
@@ -160,7 +161,22 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
                 ))}
             </TextField>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
+            <TextField
+              label="Role"
+              value={formData.role}
+              onChange={handleChange("role")}
+              fullWidth
+              variant="outlined"
+              size="small"
+              required
+              select
+            >
+              <MenuItem value={1}>Staff</MenuItem>
+              <MenuItem value={0}>Manager</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={6}>
             <TextField
               label="Password"
               value={formData.pwd}
@@ -170,11 +186,14 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
               size="small"
               type="password"
               required
-              disabled={!changePwd && formData.pwd}
+              disabled={!changePwd && userData}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton color={changePwd ? "primary" : "default"} onClick={() => setChangePwd(!changePwd)}>
+                    <IconButton
+                      color={changePwd ? "primary" : "default"}
+                      onClick={() => setChangePwd(!changePwd)}
+                    >
                       <EditIcon />
                     </IconButton>
                   </InputAdornment>
