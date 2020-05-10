@@ -32,6 +32,9 @@ function UserItem({ user, refresh }) {
               <strong>{user.name}</strong>
               {" - "}
               {user.department && user.department.name}
+              {user.department &&
+                user.department.company &&
+                ` (${user.department.company.name})`}
             </>
           }
           secondary={`${user.role === 0 ? "Manager" : "Staff"}, ${

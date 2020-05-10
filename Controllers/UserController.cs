@@ -33,6 +33,8 @@ namespace CompanyContactManagment.Controllers
                 if (deparment != null)
                 {
                     user.Department = deparment;
+                    var company = await _context.Companies.FindAsync(deparment.CompanyId);
+                    user.Department.Company = company;
                 }
             }
 
