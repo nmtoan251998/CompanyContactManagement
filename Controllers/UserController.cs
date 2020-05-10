@@ -140,7 +140,7 @@ namespace CompanyContactManagment.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserModel>> Login([FromBody] LoginModel acc)
         {
-            
+
             // check in
             var login_user = await _context.Users.SingleOrDefaultAsync(user => user.Email == acc.Email && user.Pwd == acc.Pwd);
             if (login_user == null)
@@ -149,6 +149,13 @@ namespace CompanyContactManagment.Controllers
                 return NotFound(status);
             }
             setStatus("success", "login successfully", 200);
+            var deparment = await _context.Departments.FindAsync(login_user.DepartmentId);
+            if (deparment != null)
+            {
+                login_user.Department = deparment;
+                var company = await _context.Companies.FindAsync(deparment.CompanyId);
+                login_user.Department.Company = company;
+            }
 
             return login_user;
         }
@@ -158,7 +165,8 @@ namespace CompanyContactManagment.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
 
-        private void setStatus(string status_, string message, int code) {            
+        private void setStatus(string status_, string message, int code)
+        {
             status.status = status_;
             status.message = message;
             status.code = code;
