@@ -170,7 +170,7 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
               size="small"
               type="password"
               required
-              disabled={!changePwd}
+              disabled={!changePwd && formData.pwd}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
