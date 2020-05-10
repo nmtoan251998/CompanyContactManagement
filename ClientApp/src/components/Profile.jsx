@@ -44,12 +44,14 @@ function Profile() {
         <IconButton color="inherit" onClick={() => setShowEdit(true)}>
           <EditIcon />
         </IconButton>
-        <UserDialog
-          open={showEdit}
-          onClose={() => setShowEdit(false)}
-          userData={user}
-          onCompleted={(data) => setUser(data)}
-        />
+        {showEdit && (
+          <UserDialog
+            open={showEdit}
+            onClose={() => setShowEdit(false)}
+            userData={user}
+            onCompleted={(data) => setUser(data)}
+          />
+        )}
       </Box>
       <Avatar style={{ height: 92, width: 92, margin: "18px auto" }}>
         {user.name[0]}

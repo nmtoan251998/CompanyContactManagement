@@ -30,12 +30,11 @@ function Home() {
           display="flex"
           alignItems="center"
         >
-          <Typography style={{ flexGrow: 1, padding: "8px 0px" }} variant="h5">{`People (${
-            (contacts &&
-              contacts.data &&
-              contacts.data.users_list &&
-              contacts.data.users_list.length) ||
-            0
+          <Typography
+            style={{ flexGrow: 1, padding: "8px 0px" }}
+            variant="h5"
+          >{`People (${
+            (contacts && contacts.data && contacts.data.length) || 0
           })`}</Typography>
           {user && user.role === 0 && <ButtonCreate {...contacts} />}
         </Box>

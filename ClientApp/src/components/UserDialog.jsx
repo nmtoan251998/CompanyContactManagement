@@ -147,7 +147,7 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
               </MenuItem>
               {departments &&
                 departments.map((d) => (
-                  <MenuItem value={d.id}>
+                  <MenuItem key={d.id} value={d.id}>
                     {`${d.name} (${d.company.name})`}
                   </MenuItem>
                 ))}

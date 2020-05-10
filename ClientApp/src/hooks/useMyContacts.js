@@ -8,7 +8,7 @@ function useMyContacts() {
   useEffect(() => {
     fetch("/api/User/all")
       .then((response) => response.json())
-      .then((data) => setData({ users_list: data }))
+      .then((data) => setData(data))
       .catch((error) => setError(error));
   }, [timestamp]);
 

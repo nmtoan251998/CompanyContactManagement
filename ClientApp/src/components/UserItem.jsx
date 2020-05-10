@@ -60,18 +60,22 @@ function UserItem({ user, refresh }) {
           )}
         </ListItemSecondaryAction>
       </ListItem>
-      <UserDialog
-        open={showEdit}
-        onClose={() => setShowEdit(false)}
-        onCompleted={refresh}
-        userData={user}
-      />
-      <DeleteConfirmDialog
-        open={showDel}
-        onClose={() => setShowDel(false)}
-        onCompleted={refresh}
-        user={user}
-      />
+      {showEdit && (
+        <UserDialog
+          open={showEdit}
+          onClose={() => setShowEdit(false)}
+          onCompleted={refresh}
+          userData={user}
+        />
+      )}
+      {showDel && (
+        <DeleteConfirmDialog
+          open={showDel}
+          onClose={() => setShowDel(false)}
+          onCompleted={refresh}
+          user={user}
+        />
+      )}
     </>
   );
 }
