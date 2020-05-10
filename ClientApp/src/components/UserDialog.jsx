@@ -10,7 +10,10 @@ import {
   Typography,
   CircularProgress,
   MenuItem,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import useCreateUser from "../hooks/useCreateUser";
 import useUpdateUser from "../hooks/useUpdateUser";
 import useDepartments from "../hooks/useDepartments";
@@ -22,11 +25,12 @@ const formInitData = {
   phone: "",
   address: "",
   departmentId: "",
-  pwd: "123456",
+  pwd: "",
 };
 
 function UserDialog({ open, onClose, onCompleted, userData }) {
   const [formData, setFormData] = useState(userData || formInitData);
+  const [changePwd, setChangePwd] = useState(false);
   const { data: departments } = useDepartments();
   const [
     createUser,
@@ -59,7 +63,7 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
     if (data) {
       onCompleted({
         ...formData,
-        department: departments[formData.departmentId -1],
+        department: departments[formData.departmentId - 1],
       });
       onClose();
     }
@@ -155,6 +159,28 @@ function UserDialog({ open, onClose, onCompleted, userData }) {
                   </MenuItem>
                 ))}
             </TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Password"
+              value={formData.pwd}
+              onChange={handleChange("pwd")}
+              fullWidth
+              variant="outlined"
+              size="small"
+              type="password"
+              required
+              disabled={!changePwd}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton color={changePwd ? "primary" : "default"} onClick={() => setChangePwd(!changePwd)}>
+                      <EditIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Grid>
           <Grid item xs={12}>
             <Typography color="error">{error && error.title}</Typography>
