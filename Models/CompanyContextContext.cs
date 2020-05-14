@@ -11,12 +11,14 @@ namespace CompanyContactManagment.Models
         public virtual DbSet<DepartmentModel> Departments { get; set; }
         public virtual DbSet<CompanyModel> Companies { get; set; }
         public virtual DbSet<UserModel> Users { get; set; }
+        public virtual DbSet<MessageChatModel> MessageChats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DepartmentModel>().ToTable("Departments");
             modelBuilder.Entity<CompanyModel>().ToTable("Companies");
             modelBuilder.Entity<UserModel>().ToTable("Users");
+            modelBuilder.Entity<MessageChatModel>().ToTable("MessageChats");
         }
     }
 }

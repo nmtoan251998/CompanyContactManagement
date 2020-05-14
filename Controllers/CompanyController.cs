@@ -9,7 +9,7 @@ using CompanyContactManagment.Models;
 
 namespace CompanyContactManagment.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/company")]
     [ApiController]
     public class CompanyController : ControllerBase
     {
@@ -41,9 +41,36 @@ namespace CompanyContactManagment.Controllers
             return companyModel;
         }
 
-        // PUT: api/Company/5
+        // PUT: api/Company
         // add modification method here
-        [HttpPut("{id}")]
+        [HttpPut]
+        public async Task<IActionResult> PutCompanyModel(CompanyModel companyModel)
+        {
+            if (companyModel.Id == 0)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(companyModel).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CompanyModelExists(companyModel.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // POST: api/Company
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
